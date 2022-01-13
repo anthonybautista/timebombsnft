@@ -1,38 +1,210 @@
 .App {
-  text-align: center;
+    width: 95%;
+    margin: auto;
+}
+
+body {
+    background-color: black;
+    color: lightgray;
+    text-align: center;
+    font-weight: bold;
+    font-size: small;
+}
+
+img {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#headerBar {
+    position: static;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    width: 300px;
+    height: 66px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#navBar {
+    padding: 5px;
+    display: grid;
+    grid-template-columns: 3% 31% 31% 32% 3%;
+    grid-template-rows: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+#homeButton {
+    grid-column: 2/3;
 }
 
-.App-link {
-  color: #61dafb;
+#myBombsButton {
+    grid-column: 3/4;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#connectButton {
+    grid-column: 4/5;
+}
+
+#tagline {
+    margin: 0;
+    padding: 0;
+}
+
+.cta-button {
+    margin-top: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 150px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.connect-wallet-button {
+    background: rgb(53, 59, 66);
+}
+
+.connect-wallet-button:hover {
+    background: rgb(215, 0, 0);
+}
+
+#mint {
+    width: 300px;
+    margin: auto;
+    padding: 5px;
+    text-align: center;
+    border: 2px black solid;
+    border-radius: 17px;
+    background-color: lightgray;
+    color: black;
+    box-shadow: -2px 2px #888888;
+}
+
+.contentBox {
+    width: 60%;
+    min-width: 300px;
+    max-width: 600px;
+    margin: 10px auto 0 auto;
+    padding: 5px;
+    border: 2px black solid;
+    border-radius: 17px;
+    background-color: lightgray;
+    color: black;
+    box-shadow: -2px 2px #888888;
+}
+
+#statusBox {
+    width: 325px;
+    margin: 10px auto 0 auto;
+    padding: 5px;
+    border: 2px black solid;
+    border-radius: 17px;
+    background-color: lightgray;
+    color: black;
+    box-shadow: -2px 2px #888888;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
+}
+
+#statusLeft {
+    grid-column: 1/2;
+}
+
+#statusLeft h3 {
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+#statusRight {
+    grid-column: 2/3;
+    padding-top: 10px;
+}
+
+#myBombsBox {
+    width: 325px;
+    margin: 10px auto 0 auto;
+    padding: 5px;
+    border: 2px black solid;
+    border-radius: 17px;
+    background-color: lightgray;
+    color: black;
+    box-shadow: -2px 2px #888888;
+}
+
+ul {
+    text-align: left;
+    padding-inline-start: 0;
+}
+
+li {
+    list-style: none;
+}
+
+li span {
+    padding-right: 10px;
+}
+
+.list {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 70px 1fr;
+}
+
+.list img {
+    grid-column: 1/2;
+    margin-top: auto;
+    margin-bottom:auto;
+}
+
+.list span {
+    grid-column: 2/3;
+    margin-top: auto;
+    margin-bottom:auto;
+}
+
+#countdownClock {
+    font-family: 'digital_dreamregular', sans-serif;
+    color: red;
+    background-color: black;
+    font-size: medium;
+    width: 150px;
+    height: 25px;
+    margin: auto;
+    padding-top: 8px;
+    border: 5px brown solid;
+}
+
+@media only screen and (min-width: 450px) {
+
+    .App-logo {
+        width: 450px;
+        height: 100px;
+    }
+
+    body {
+        font-size: medium;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+
+    #connectButton {
+        text-align: left;
+    }
+
+    #homeButton {
+        text-align: right;
+    }
+
+}
+
+@font-face {
+    font-family: 'digital_dreamregular';
+    src: url('digitaldream-webfont.woff2') format('woff2'),
+    url('digitaldream-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }
