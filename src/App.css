@@ -1,6 +1,6 @@
 .App {
     width: 95%;
-    margin: auto;
+    margin: 0 auto auto auto;
 }
 
 body {
@@ -17,7 +17,8 @@ img {
 }
 
 #headerBar {
-    position: static;
+    width: 99%;
+    margin: auto;
 }
 
 .App-logo {

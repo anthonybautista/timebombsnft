@@ -236,7 +236,7 @@ function App() {
                     <div class="list">
                         <img src=${bomb2} class="bomb" alt="Bomb" />
                         <span>Once the game starts, all bombs will have 24 hours to be 'reset'. Resetting your bomb
-                              has a 10% chance of causing detonation.</span>
+                              has a 20% chance of causing detonation.</span>
                     </div>
                 </li>
                 <br/>
@@ -265,17 +265,16 @@ function App() {
         let roadmap = `<div class="smallBox">
             <h2>Roadmap</h2>
             </div>
-            <div class="smallBox">
-                <h2>Round 1</h2>
+            <div class="contentBox">
+                <h2 class="underlined">Round 1</h2>
                 <p>Round 1 will begin shortly after all 999 TIMEBOMBs have been minted.</p>
                 <p class="underlined">Proceeds will be divided as follows:</p>
                 <p>Prize Pool: 85%</p>
                 <p>Developer: 10%</p>
                 <p>Community Manager: 2.5%</p>
                 <p>Art for Round 2: 2.5%</p>
-            </div>
-            <div class="smallBox">
-                <h2>Round 2</h2>
+                <br/>
+                <h2 class="underlined">Round 2</h2>
                 <p>Round 2 artwork is already in progress. Round two will 
                    be a collection of 3,333 unique TIMEBOMBs.</p>
                 <p>All Round 1 bombs will be eligible to participate in Round 2.</p>
@@ -507,6 +506,7 @@ function App() {
                 startCountdown();
             }
         })
+
     });
 
 
@@ -519,7 +519,9 @@ function App() {
               999 NFTs waiting to explode on Avalanche.
             </p>
             <div id={'socialBar'}>
-                <img src={twitter} alt={'Twitter logo'} />
+                <a href="https://twitter.com/timebombs_nft" target="_blank" rel="noreferrer">
+                    <img src={twitter} alt={'Twitter logo'} />
+                </a>
                 <img src={discord} alt={'Discord logo'} />
             </div>
             <div id={'navBar'}>
