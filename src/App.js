@@ -7,6 +7,7 @@ import bomb1 from "./bomb1.png";
 import bomb2 from "./bomb2.png";
 import bomb3 from "./bomb3.png";
 import bomb4 from "./bomb4.png";
+import villain from "./villain.png";
 import xrpant from "./xrpant.jpg";
 import snowbound from "./snowbound.jpg";
 import thevert from "./thevert.jpg";
@@ -22,7 +23,7 @@ function App() {
     const NFT_ADDRESS = "0x8B4C4A3407E9a1eFF4863DA752C54e8c430274c3";
     let myBombTokenIds = [];
     let myBombIndex = 1;
-    let x;
+    let gameState = true;
     let y;
     let provider
     let signer
@@ -51,7 +52,7 @@ function App() {
                 await signer.getAddress()
                 await checkNetwork()
                 await checkAccount()
-                $("button#connect").html('Connected');
+                $("button#connect").html('Connected').css("background", "rgb(215, 0, 0)");
                 $("button#connect").prop('disabled', true);
                 getMinted();
             } catch (err) {
@@ -74,7 +75,7 @@ function App() {
             await checkNetwork();
             await checkAccount();
             console.log("Connected.");
-            $("button#connect").html('Connected');
+            $("button#connect").html('Connected').css("background", "rgb(215, 0, 0)");
             getMinted();
         } catch (err) {
             $("button#connect").prop('disabled', false);
@@ -187,6 +188,14 @@ function App() {
         )
     }
 
+    const BVOButton = () => {
+        return (
+            <button id={'BVO'} className='cta-button connect-wallet-button'>
+                BVO
+            </button>
+        )
+    }
+
     const homeButton = () => {
         return (
             <button id={'home'} className='cta-button connect-wallet-button'>
@@ -228,7 +237,8 @@ function App() {
                 <li>
                     <div class="list">
                         <img src=${bomb1} class="bomb" alt="Bomb" />
-                        <span>85% of mint sales will be used to bond for TIME, and converted to wMEMO.</span>
+                        <span>85% of mint sales will be used to purchase a yield-bearing asset chosen by the
+                              community.</span>
                     </div>
                 </li>
                 <br/>
@@ -243,8 +253,8 @@ function App() {
                 <li>
                     <div class="list">
                         <img src=${bomb3} class="bomb" alt="Bomb" />
-                        <span>Once reset, there is a 24-hour cooldown before the timer starts again. If your 24-hour
-                              timer runs out, the bomb is detonated.</span>
+                        <span>Once reset, the timer will immediately begin counting down again from 24 hours. 
+                              If your 24-hour timer runs out, the bomb is detonated.</span>
                     </div>
                 </li>
                 <br/>
@@ -252,7 +262,7 @@ function App() {
                     <div class="list">
                         <img src=${bomb4} class="bomb" alt="Bomb" />
                         <span>When there are only 3 active bombs left, anyone can halt the game and the owners of the
-                              remaining bombs can collect their share of the wMEMO.</span>
+                              remaining bombs can collect their share of the prize pool.</span>
                     </div>
                 </li>
             </ul>
@@ -270,9 +280,10 @@ function App() {
                 <p>Round 1 will begin shortly after all 999 TIMEBOMBs have been minted.</p>
                 <p class="underlined">Proceeds will be divided as follows:</p>
                 <p>Prize Pool: 85%</p>
-                <p>Developer: 10%</p>
+                <p>Developer: 9%</p>
                 <p>Community Manager: 2.5%</p>
                 <p>Art for Round 2: 2.5%</p>
+                <p>BOMB VILLAIN ORACLE: 1%</p>
                 <br/>
                 <h2 class="underlined">Round 2</h2>
                 <p>Round 2 artwork is already in progress. Round two will 
@@ -281,6 +292,35 @@ function App() {
             </div>`;
 
         return roadmap;
+    }
+
+    function returnBVO() {
+        let bombVO = `<img id="villain" src=${villain} alt="Villain"/>
+            <div class="smallBox">
+            <h2>Bomb Villain Oracle</h2>
+            </div>
+            <div class="contentBox">
+                <h2 class="underlined">Send Detonation Code</h2>
+                <p>Enter a number between 0-65000</p>
+                <input  id="bvoInput" type="number" min="0" max="65000">
+                <button onClick={sendBVO} class='cta-button connect-wallet-button'>Send</button>                
+                <p>Sending detonation codes helps contribute to game randomness.</p>
+                <p>Every number sent is turned into a hash that can be used in calculating whether
+                   or not a bomb detonates upon reset.</p>
+                <p>The last 10 submitted numbers are eligible to be selected. If your hash causes a
+                   bomb to detonate you earn points. Villains with the most points will win a prize!</p>
+                <p>Submit numbers often to help make the game fair and increase your chance of winning 
+                   a prize!</p>
+            </div>
+            <div class="contentBox">
+                <h2 class="underlined">Villain Leaderboard</h2>
+                <ul id="villainLeaderboard">
+                    <li class="underlined">Wallet</li><span class="leaderPoints underlined">Points</span>
+                </ul>
+                <br/>
+            </div>`;
+
+        return bombVO;
     }
 
     function homeContent() {
@@ -337,8 +377,8 @@ function App() {
         <div id="myBombsBox">
             <h3>My Bombs</h3>
             <p id="myBombNumbers"><span id="leftArrow">&larr;</span>  ${index} / ${numBombs}  <span id="rightArrow">&rarr;</span></p>
-            <div><img src="${URI}" alt="TIMEBOMB #${myBombTokenIds[index-1]}"/><br/></div>
-            <p>Time until timer starts: <span id="timeUntilCountdown"></span></p>
+            <div><img class="bombIMG" src="${URI}" alt="TIMEBOMB #${myBombTokenIds[index-1]}"/><br/></div>
+            <p>Bomb Status: <span id="bombState"></span></p>
             <div id="countdownClock">24:00:00</div>
             <button onClick={resetTimer()} class='cta-button connect-wallet-button'>
                         Reset Timer</button>
@@ -351,6 +391,8 @@ function App() {
     function refreshStatus() {}
 
     function haltGame() {}
+
+    function sendBVO() {}
 
     function getBombTokenIds() {
         /* need to get token ids */
@@ -372,42 +414,16 @@ function App() {
     }
 
     /* countdown code taken from w3schools */
-    function startCountdown() {
-        // Set the date we're counting down to
-        let countDownDate = new Date().getTime()+(.1*60*1000);
-
-        // Update the count down every 1 second
-        x = setInterval(function() {
-
-            // Get today's date and time
-            let now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            let distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Display the result in the element with id="demo"
-            document.getElementById("timeUntilCountdown").innerHTML = hours + "h "
-                + minutes + "m " + seconds + "s ";
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("timeUntilCountdown").innerHTML = "In Progress";
-                startClock();
-            }
-        }, 1000);
-    }
-
-    /* countdown code taken from w3schools */
     function startClock() {
         // Set the date we're counting down to
-        let countDownDate = new Date().getTime()+(24*60*60*1000);
-
+        let countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
+        if (!gameState) {
+            document.getElementById("bombState").innerHTML = "Game Over.";
+            document.getElementById("countdownClock").innerHTML = "GAME OVER";
+            return;
+        } else if (countDownDate > 0) {
+            document.getElementById("bombState").innerHTML = "Countdown Active!";
+        }
         // Update the count down every 1 second
         y = setInterval(function() {
 
@@ -429,13 +445,13 @@ function App() {
             // If the count down is finished, write some text
             if (distance < 0) {
                 clearInterval(y);
-                document.getElementById("countdownClock").innerHTML = "Bomb Detonated";
+                document.getElementById("bombState").innerHTML = "Boom!";
+                document.getElementById("countdownClock").innerHTML = "DETONATED";
             }
         }, 1000);
     }
 
     function clearTimers() {
-        clearInterval(x);
         clearInterval(y);
     }
 
@@ -484,7 +500,13 @@ function App() {
             clearTimers();
             $("div#content").empty();
             $("div#content").html(myBombs());
-            startCountdown();
+            startClock();
+        })
+        $("button#BVO").off().on("click", function(event) {
+            event.preventDefault();
+            clearTimers();
+            $("div#content").empty();
+            $("div#content").html(returnBVO());
         })
         $("button#connect").off().on("click", function(event) {
             event.preventDefault();
@@ -495,7 +517,7 @@ function App() {
                 myBombIndex -= 1;
                 $("div#myBombsBoxWrapper").html(myBombStats(myBombIndex));
                 clearTimers();
-                startCountdown();
+                startClock();
             }
         })
         $("#content").off().on('click', '#rightArrow', function () {
@@ -503,9 +525,10 @@ function App() {
                 myBombIndex += 1;
                 $("div#myBombsBoxWrapper").html(myBombStats(myBombIndex));
                 clearTimers();
-                startCountdown();
+                startClock();
             }
         })
+        $("#content").css("padding-top", $("#headerBar").height());
 
     });
 
@@ -522,7 +545,9 @@ function App() {
                 <a href="https://twitter.com/timebombs_nft" target="_blank" rel="noreferrer">
                     <img src={twitter} alt={'Twitter logo'} />
                 </a>
-                <img src={discord} alt={'Discord logo'} />
+                <a href="https://discord.gg/Wrx7a9ceFZ" target="_blank" rel="noreferrer">
+                    <img src={discord} alt={'Discord logo'} />
+                </a>
             </div>
             <div id={'navBar'}>
                 <div id={'homeButton'}>
@@ -530,6 +555,9 @@ function App() {
                 </div>
                 <div id={'myBombsButton'}>
                     {myBombsButton()}
+                </div>
+                <div id={'BVOButton'}>
+                    {BVOButton()}
                 </div>
                 <div id={'gameplayButton'}>
                     {gameplayButton()}
