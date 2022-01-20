@@ -310,7 +310,7 @@ function App() {
                 <p>Points given will be equal to the number of bombs left - 999, meaning you get more
                    points when there are less bombs left, but the chance to take out multiple bombs is
                    higher early on!</p>
-                <a href="https://www.timebombsnft.com/Timebombs_NFT_-_Bomb_Villain_Oracle" target="_blank" rel="noreferrer">
+                <a href="https://www.timebombsnft.com/Timebombs_NFT_-_Bomb_Villain_Oracle.pdf" target="_blank" rel="noreferrer">
                     BVO Whitepaper
                 </a> 
             </div>
