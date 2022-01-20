@@ -305,12 +305,14 @@ function App() {
                 <input  id="bvoInput" type="number" min="0" max="65000">
                 <button onClick={sendBVO} class='cta-button connect-wallet-button'>Send</button>                
                 <p>Sending detonation codes helps contribute to game randomness.</p>
-                <p>Every number sent is turned into a hash that can be used in calculating whether
-                   or not a bomb detonates upon reset.</p>
-                <p>The last 10 submitted numbers are eligible to be selected. If your hash causes a
+                <p>The last 10 submitted numbers are eligible to be selected. If your number causes a
                    bomb to detonate you earn points. Villains with the most points will win a prize!</p>
-                <p>Submit numbers often to help make the game fair and increase your chance of winning 
-                   a prize!</p>
+                <p>Points given will be equal to the number of bombs left - 999, meaning you get more
+                   points when there are less bombs left, but the chance to take out multiple bombs is
+                   higher early on!</p>
+                <a href={process.env.PUBLIC_URL + '/Timebombs_NFT_-_Bomb Villain Oracle.pdf'} target="_blank" rel="noreferrer">
+                    BVO Whitepaper
+                </a> 
             </div>
             <div class="contentBox">
                 <h2 class="underlined">Villain Leaderboard</h2>
