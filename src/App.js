@@ -258,7 +258,7 @@ function App() {
 
     const mintNftButton = () => {
       return (
-          <button id={'mintButton'} onClick={mintNftHandler} className='cta-button connect-wallet-button'>
+          <button id={'mintButton'} className='cta-button connect-wallet-button'>
             Mint NFT
           </button>
       )
@@ -383,7 +383,7 @@ function App() {
     function homeContent() {
         let collage = `<div><img src="${gif}" alt="Collage of TIMEBOMBS"/><br/></div>`;
         let mintDiv = `<div id="mint"><h3>Bombs Minted</h3><p id="bombError"></p><p><span id="bombsMinted">0</span> / 999</p>
-        <input id="mintCount" type="number" min="1" max="11" defaultValue="1"/>
+        <input id="mintCount" type="number" min="1" max="11" value="1"/>
         <div id="mintNftButton"><button id="mintButton" class='cta-button connect-wallet-button'>
         Mint NFT</button><p>Price: <span id="price">1</span> AVAX</p></div></div>`;
         return collage+mintDiv;
