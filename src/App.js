@@ -7,6 +7,8 @@ import bomb1 from "./bomb1.png";
 import bomb2 from "./bomb2.png";
 import bomb3 from "./bomb3.png";
 import bomb4 from "./bomb4.png";
+import bomb5 from "./bomb5.png";
+import bomb6 from "./bomb6.png";
 import villain from "./villain.png";
 import xrpant from "./xrpant.jpg";
 import snowbound from "./snowbound.jpg";
@@ -170,7 +172,41 @@ function App() {
         }
     }
 
-    const mintNftHandler = () => { }
+    const mintNftHandler = async () => {
+        const { ethereum } = window;
+
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const connectedContract = new ethers.Contract(NFT_ADDRESS, NFT, signer);
+        try {
+            $("p#mintError").text("");
+
+            if (ethereum) {
+                let count = $("input#mintCount").val();
+                let cost = (count * 10 ** 18).toString();
+                console.log("Going to pop wallet now to pay gas...");
+                let nftTxn = await connectedContract.mint(count, {value: cost});
+
+                console.log("Mining...please wait.");
+                $("p#bombError").text("Minting...");
+                await nftTxn.wait();
+
+                console.log(`Mined, see transaction: https://snowtrace.io/tx/${nftTxn.hash}`);
+
+                let txLink = `<a href='https://snowtrace.io/tx/${nftTxn.hash}' target="_blank" rel="noreferrer">
+                                  View Transaction</a>`;
+
+                $("p#bombError").html(`Successfully minted: ${txLink}`);
+                getMinted();
+            } else {
+                console.log("Ethereum object doesn't exist!");
+                $("p#mintError").text("Connect wallet and refresh!");
+            }
+        } catch (error) {
+            console.log(error)
+            $("p#bombError").text(`${error.data.message}`);
+        }
+    }
 
     const connectWalletButton = () => {
       return (
@@ -222,7 +258,7 @@ function App() {
 
     const mintNftButton = () => {
       return (
-          <button onClick={mintNftHandler} className='cta-button connect-wallet-button'>
+          <button id={'mintButton'} onClick={mintNftHandler} className='cta-button connect-wallet-button'>
             Mint NFT
           </button>
       )
@@ -237,8 +273,8 @@ function App() {
                 <li>
                     <div class="list">
                         <img src=${bomb1} class="bomb" alt="Bomb" />
-                        <span>85% of mint sales will be used to purchase a yield-bearing asset chosen by the
-                              community.</span>
+                        <span>Every Timebomb NFT will be eligible to participate in the game. The game is 
+                              free for anyone who purchases and holds a Timebomb NFT.</span>
                     </div>
                 </li>
                 <br/>
@@ -261,8 +297,23 @@ function App() {
                 <li>
                     <div class="list">
                         <img src=${bomb4} class="bomb" alt="Bomb" />
-                        <span>When there are only 3 active bombs left, anyone can halt the game and the owners of the
-                              remaining bombs can collect their share of the prize pool.</span>
+                        <span>Detonated Timebombs NFTs are still yours to keep, and will have future utility.
+                              Participating in the game does not risk losing your Timebomb NFT.</span>
+                    </div>
+                </li>
+                <br/>
+                <li>
+                    <div class="list">
+                        <img src=${bomb5} class="bomb" alt="Bomb" />
+                        <span>When there are only 3 active bombs left, any remaining player can halt the game and the 
+                              owners of the remaining bombs will be able to collect their share of the prize pool.</span>
+                    </div>
+                </li>
+                <br/>
+                <li>
+                    <div class="list">
+                        <img src=${bomb6} class="bomb" alt="Bomb" />
+                        <span>85% of mint proceeds (~849.15 AVAX) will be allocated to the game prize pool.</span>
                     </div>
                 </li>
             </ul>
@@ -280,9 +331,10 @@ function App() {
                 <p>Round 1 will begin shortly after all 999 TIMEBOMBs have been minted.</p>
                 <p class="underlined">Proceeds will be divided as follows:</p>
                 <p>Prize Pool: 85%</p>
-                <p>Developer: 9%</p>
+                <p>Developer: 7.7%</p>
                 <p>Community Manager: 2.5%</p>
                 <p>Art for Round 2: 2.5%</p>
+                <p>Chainlink Node: 1.3%</p>
                 <p>BOMB VILLAIN ORACLE: 1%</p>
                 <br/>
                 <h2 class="underlined">Round 2</h2>
@@ -303,13 +355,11 @@ function App() {
                 <h2 class="underlined">Send Detonation Code</h2>
                 <p>Enter a number between 0-65000</p>
                 <input  id="bvoInput" type="number" min="0" max="65000">
-                <button onClick={sendBVO} class='cta-button connect-wallet-button'>Send</button>                
+                <button onclick="sendBVO()" class='cta-button connect-wallet-button'>Send</button>                
                 <p>Sending detonation codes helps contribute to game randomness.</p>
-                <p>The last 10 submitted numbers are eligible to be selected. If your number causes a
-                   bomb to detonate you earn points. Villains with the most points will win a prize!</p>
-                <p>Points given will be equal to the number of bombs left - 999, meaning you get more
-                   points when there are less bombs left, but the chance to take out multiple bombs is
-                   higher early on!</p>
+                <p>The last 10 submitted numbers are eligible to be selected. Earn a point each time your code is chosen.
+                   You can send a code every 30 minutes and the villains with the most points will win a prize!</p>
+                <p>There are 9.9 AVAX up for grabs, so submit codes often to increase your chance of winning!</p>
                 <a href="https://www.timebombsnft.com/Timebombs_NFT_-_Bomb_Villain_Oracle.pdf" target="_blank" rel="noreferrer">
                     BVO Whitepaper
                 </a> 
@@ -320,7 +370,12 @@ function App() {
                     <li class="underlined">Wallet</li><span class="leaderPoints underlined">Points</span>
                 </ul>
                 <br/>
-            </div>`;
+            </div>
+            <script>
+            function sendBVO() {
+                
+            }
+            </script>`;
 
         return bombVO;
     }
@@ -328,8 +383,9 @@ function App() {
     function homeContent() {
         let collage = `<div><img src="${gif}" alt="Collage of TIMEBOMBS"/><br/></div>`;
         let mintDiv = `<div id="mint"><h3>Bombs Minted</h3><p id="bombError"></p><p><span id="bombsMinted">0</span> / 999</p>
-        <div id={'mintNftButton'}><button onClick={mintNftHandler} class='cta-button connect-wallet-button'>
-        Mint NFT</button><p>Price: 1 AVAX</p></div></div>`;
+        <input id="mintCount" type="number" min="1" max="11" defaultValue="1"/>
+        <div id="mintNftButton"><button id="mintButton" class='cta-button connect-wallet-button'>
+        Mint NFT</button><p>Price: <span id="price">1</span> AVAX</p></div></div>`;
         return collage+mintDiv;
     }
 
@@ -382,19 +438,22 @@ function App() {
             <div><img class="bombIMG" src="${URI}" alt="TIMEBOMB #${myBombTokenIds[index-1]}"/><br/></div>
             <p>Bomb Status: <span id="bombState"></span></p>
             <div id="countdownClock">24:00:00</div>
-            <button onClick={resetTimer()} class='cta-button connect-wallet-button'>
+            <button onclick="resetTimer()" class='cta-button connect-wallet-button'>
                         Reset Timer</button>
-        </div>`;
+        </div>
+        <script>
+        function resetTimer() {
+            
+        }
+        function refreshStatus() {
+            
+        }
+        function haltGame() {
+            
+        }
+        </script>`;
 
     }
-
-    function resetTimer() {}
-
-    function refreshStatus() {}
-
-    function haltGame() {}
-
-    function sendBVO() {}
 
     function getBombTokenIds() {
         /* need to get token ids */
@@ -483,7 +542,6 @@ function App() {
             clearTimers();
             $("div#content").empty();
             $("div#content").html(homeContent());
-            getMinted();
         })
         $("button#gameplay").off().on("click", function(event) {
             event.preventDefault();
@@ -530,27 +588,25 @@ function App() {
                 startClock();
             }
         })
+        $("#main").off().on('click', '#mintButton', function () {
+            mintNftHandler();
+        })
         $("#content").css("padding-top", $("#headerBar").height());
-
+        $("body").on('change', 'input#mintCount', function () {
+            $("span#price").text($("input#mintCount").val());
+        });
     });
 
 
   return (
     <div className="App">
+        <div id="main">
         <div id={'headerBar'}>
           <header className="App-header">
             <img src={logo} className="App-logo" alt="TIMEBOMBS logo" />
             <p id={'tagline'}>
               999 NFTs waiting to explode on Avalanche.
             </p>
-            <div id={'socialBar'}>
-                <a href="https://twitter.com/timebombs_nft" target="_blank" rel="noreferrer">
-                    <img src={twitter} alt={'Twitter logo'} />
-                </a>
-                <a href="https://discord.gg/Wrx7a9ceFZ" target="_blank" rel="noreferrer">
-                    <img src={discord} alt={'Discord logo'} />
-                </a>
-            </div>
             <div id={'navBar'}>
                 <div id={'homeButton'}>
                     {homeButton()}
@@ -582,10 +638,11 @@ function App() {
                 <h3>Bombs Minted</h3>
                 <p id="bombError"></p>
                 <p><span id="bombsMinted">0</span> / 999</p>
+                <input id="mintCount" type="number" min="1" max="11" defaultValue="1"/>
                 <div id={'mintNftButton'}>
                     {mintNftButton()}
                 </div>
-                <p>Price: 1 AVAX</p>
+                <p>Price: <span id={'price'}>1</span> AVAX</p>
             </div>
         </div>
         <div id={'team'}>
@@ -597,7 +654,16 @@ function App() {
             <img src={thevert} alt={'Avax Ape 2194'} />
             <h3>Thévert - Round 2 Art</h3>
         </div>
+        <div id={'socialBar'}>
+            <a href="https://twitter.com/timebombs_nft" target="_blank" rel="noreferrer">
+                <img src={twitter} alt={'Twitter logo'} />
+            </a>
+            <a href="https://discord.gg/Wrx7a9ceFZ" target="_blank" rel="noreferrer">
+                <img src={discord} alt={'Discord logo'} />
+            </a>
+        </div>
         <div id={'buffer'}></div>
+        </div>
     </div>
   );
 }

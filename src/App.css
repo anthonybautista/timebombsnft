@@ -104,6 +104,17 @@ img {
     text-align: center;
 }
 
+#mintCount {
+    margin-top: 5px;
+    padding: 5px;
+    background-color: black;
+    border-radius: 12px;
+    width: 135px;
+    color: red;
+    font-family: 'digital_dreamregular', sans-serif;
+    text-align: center;
+}
+
 #mint {
     width: 300px;
     margin: auto;
@@ -184,7 +195,7 @@ img {
 }
 
 #buffer {
-    height: 300px;
+    height: 100px;
 }
 
 #statusLeft {
